@@ -56,6 +56,12 @@ body {
     color: #111;
     border-radius: 20px;
     opacity: 0.7;
+    margin-bottom: 15px;
+    padding: 10px;
+}
+#machine-logo {
+    font-variant: small-caps;
+    letter-spacing: 0.8em;
 }
 
 #spin-button:hover, #spin-button:focus { opacity: 1; }

@@ -11,3 +11,14 @@
 //         spinShapes.appendChild(triangle)
 //     }
 // }
+
+initPalletView: () => {
+    let op = 0.1
+    for (let i = 3; i <= 12; i++) {
+        let el = document.createElement('div')
+        el.className = 'lime-box'
+        el.style.opacity = op
+        head.appendChild(el)
+        op += 0.1
+    }
+}
