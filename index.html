@@ -15,27 +15,52 @@
 
 <body>
 <div id="wrap">
+    <header>
+        <h1 id="logo">1 Bit Game Jam</h1>
+        <p class="dashed-under">Opacities of lime from 0.1 to 1</p>
+    </header>
 
-    <h1 id="logo">1 Bit Game Jam</h1>
-    <p class="dashed-under">Opacities of lime from 0.1 to 1</p>
+    <div class="container">
 
-    <div class="lime-box"></div>
-    <div class="lime-box"></div>
-    <div class="lime-box"></div>
-    <div class="lime-box"></div>
-    <div class="lime-box"></div>
-    <div class="lime-box"></div>
-    <div class="lime-box"></div>
-    <div class="lime-box"></div>
-    <div class="lime-box"></div>
-    <div class="lime-box"></div>
-    <hr>
+        <div class="row">
+            <div id="spin-shapes" class="col">
+                <p class="dashed-under left">SHAPOMATIC</p>
+                <button id="spin-button">S P I N</button>
+                
+                <div id="shapomatic" class="row">
+                    
+                    <div class="row shapo-row">
+                        <div class="col-4 shapo-col"></div>
+                        <div class="col-4 shapo-col"></div>
+                        <div class="col-4 shapo-col"></div>
+                    </div>
+                    <div class="row shapo-row">
+                        <div class="col-4 shapo-col"></div>
+                        <div class="col-4 shapo-col"></div>
+                        <div class="col-4 shapo-col"></div>
+                    </div>
+                    <div class="row shapo-row">
+                        <div class="col-4 shapo-col"></div>
+                        <div class="col-4 shapo-col"></div>
+                        <div class="col-4 shapo-col"></div>
+                    </div>
+                </div>
 
-    <p class="dashed-under left">S H A P E S</p>
-    <button id="tri-shapes-button">Triangles</button>
-    <button id="rect-shapes-button">Rectangles</button>
+                <button id="tri-shapes-button">Triangles</button>
+                <button id="rect-shapes-button">Rectangles</button>
+            </div> <!--spin-shapes-->
+
+            <div id="tower-arena" class="col">
+                <p class="dashed-under left">tower</p>
+            </div>
+        </div>
+    </div>
+    
+    
 
 </div> <!--wrap-->
 <script defer src="shapeup.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
 </body>
 </html>
