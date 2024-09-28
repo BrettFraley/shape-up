@@ -1,0 +1,58 @@
+body {
+    background-color: #111;
+    text-align: center;
+    color: lime;
+    font-family: courier;
+    font-size: 1.5em;
+  }
+  
+  #wrap {
+      width: 60vw;
+      margin: 25px auto;
+  }
+  
+  #logo {
+      padding: 10px;
+      border: solid 2px;
+      width: 40vw;
+      margin: 25px auto;
+  }
+  hr {
+      color: lime;
+  }
+  
+  .dashed-under {
+      text-decoration: underline dashed;
+  }
+  .left { text-align: left;}
+  
+  .lime-box {
+      width: 50px;
+      height: 50px;
+      background-color: lime;
+      display: inline-block;
+  }
+  
+  .lime-box:nth-child(3) { opacity: 0.1; }
+  .lime-box:nth-child(4) { opacity: 0.2; }
+  .lime-box:nth-child(5) { opacity: 0.3; }
+  .lime-box:nth-child(6) { opacity: 0.4; }
+  .lime-box:nth-child(7) { opacity: 0.5; }
+  .lime-box:nth-child(8) { opacity: 0.6; }
+  .lime-box:nth-child(9) { opacity: 0.7; }
+  .lime-box:nth-child(10) { opacity: 0.8; }
+  .lime-box:nth-child(11) { opacity: 0.9; }
+  .lime-box:nth-child(12) { opacity: 1; }
+  
+  /* Shapes */
+  
+  .triangle, .rectangle { margin: 5px; display: inline-block; }
+  .rectangle { background-color: lime; }
+  
+  
+  
+  
+  
+  
+  
+  
