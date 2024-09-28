@@ -6,7 +6,6 @@ body {
     font-size: 1.5em;
   }
 
-.dashed-under { text-decoration: underline dashed; }
 .left { text-align: left;}
 .inline { display: inline-block; }
   
