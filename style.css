@@ -67,7 +67,7 @@ body {
     letter-spacing: 0.8em;
 }
 
-#spin-button:hover, #spin-button:focus { opacity: 1; }
+#spin-button:hover { opacity: 1; }
 
 #tower-arena {
     border: solid 2px;
