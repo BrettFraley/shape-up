@@ -24,6 +24,28 @@ const dev = {
     shapoSpin: () => {
         let cols = document.getElementsByClassName('shapo-col')
         let vals = []
+        let once = false
+        spinButton.disabled = true
+        // do this better..as a method above
+        let spinnerInterval = setInterval(() => {
+            for (let i = 0; i < cols.length; i++) {
+                if (!once) {
+                    cols[i].style.color = 'rgba(0,0,0,0)'   
+                }
+                cols[i].style.opacity = randOpacity()
+            }
+            once = true
+
+        }, 200)
+
+        setTimeout(() => { 
+            clearInterval(spinnerInterval)
+            for (let i = 0; i < cols.length; i++) {
+                cols[i].style.color = 'lime'
+                cols[i].style.opacity = 1
+            }
+            spinButton.disabled = false
+        }, 2000)
 
         for (let i = 0; i < cols.length; i++) {
             let shapeVal = `&#${dev.shapeIcons[rand(3)]}`
@@ -136,22 +158,23 @@ const makeCircle = sizes => {
 }
 
 spinButton.addEventListener('click', () => {
- 
-    game.unhighlight()
-    
-    if (game.player.spinCount < 1) {
-        // TODO - pop up to remove block from tower for 10? spins
-        spinCount.innerHTML = `Out of spins!`
-        return
+    if (!this.disabled) {
+        game.unhighlight()
+        
+        if (game.player.spinCount < 1) {
+            // TODO - pop up to remove block from tower for 10? spins
+            spinCount.innerHTML = `Out of spins!`
+            return
+        }
+        game.player.spinCount -= 1
+        game.updateSpinCount()
+        const spinResults = dev.parseSpinResults(dev.shapoSpin())
+        
+        setTimeout(() => {
+            let wonShapes = Object.keys(spinResults).filter(k =>  spinResults[k] === true)
+            dev.populateResults(wonShapes)
+        }, 2050)
     }
-    game.player.spinCount -= 1
-    game.updateSpinCount()
-
-    const spinResults = dev.parseSpinResults(dev.shapoSpin())
-
-    let wonShapes = Object.keys(spinResults).filter(k =>  spinResults[k] === true)
-
-    dev.populateResults(wonShapes)
 
 }, false)
 
@@ -169,8 +192,8 @@ const game = {
         const len = divs.length
 
         if (len > 0) {
-            for (let i = len - 1; i > -1; i--) {
 
+            for (let i = len - 1; i > -1; i--) {
                 divs[i].className = divs[i].classList.contains('shapo-row')
                 ? 'row shapo-row' : 'col-4 shapo-col'
             }
