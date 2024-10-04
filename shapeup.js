@@ -16,8 +16,8 @@ const dev = {
         else if (shape.charCodeAt() === parseInt(dev.shapeIcons[1])) {
             spinShapes.appendChild(makeTriangle(randSizes()))
         }
-        else {
-            // spinShapes.appendChild(makeCircle(randSizes()))
+        else if (shape.charCodeAt() === parseInt(dev.shapeIcons[2])) {
+            spinShapes.appendChild(makeCircle(randSizes()))
         }
     },
 
@@ -30,6 +30,7 @@ const dev = {
             cols[i].innerHTML = shapeVal
             vals.push(shapeVal)
         }
+
         return [
             [vals[0], vals[1], vals[2]],
             [vals[3], vals[4], vals[5]],
@@ -55,12 +56,12 @@ const dev = {
         won.forEach(val => {
             switch(val) {
                 case 'topRowMatch':
-                case 'leftColMatch':
+                case 'leftColMatch':                    
                     dev.shapeMaker(cols[0].innerHTML)
                     break;
                 case 'midRowMatch':
-                case 'midColMatch':
-                    dev.shapeMaker(cols[5].innerHTML)
+                case 'midColMatch':                   
+                    dev.shapeMaker(cols[4].innerHTML)
                     break;
                 case 'botRowMatch':
                 case 'rightColMatch':
@@ -69,23 +70,32 @@ const dev = {
                 default:
                     console.log('Zero Wins')
             }
+            game.showWinLine(val)
         })
     },
 
 }
 
-const SIZE = 50
+const SIZE = 50    // max px width/height of a shape
+const minSize = 10 // min px width/height of a shape
 const head = document.getElementsByTagName('header')[0]
 const wrap = document.getElementById('wrap')
-const triButton = document.getElementById('tri-shapes-button')
-const rectButton = document.getElementById('rect-shapes-button')
 const spinShapes = document.getElementById('spin-shapes')
 const towerArena = document.getElementById('tower-arena')
 const spinButton = document.getElementById('spin-button')
+const spinCount = document.getElementById('spin-count')
+
 
 const rand = max => Math.floor(Math.random() * max)
 
-const randSizes = () => [rand(SIZE), rand(SIZE)]
+const randSizes = () => {
+    let size1 = rand(SIZE)
+    let size2 = rand(SIZE)
+    size1 = size1 >= minSize ? size1 : minSize
+    size2 = size2 >= minSize ? size2 : minSize
+
+    return [size1, size2]
+}
 
 const randOpacity = () => {
     let op = Math.random().toFixed(1)
@@ -113,7 +123,29 @@ const makeRectangle = sizes => {
     return el
 }
 
+const makeCircle = sizes => {
+    const el = document.createElement('div')
+    const circleSize = `${sizes[0]}px`
+    el.className = 'circle'
+    el.style.width = circleSize
+    el.style.height = circleSize
+    el.style.opacity = randOpacity()
+    el.style.borderRadius = `100%`
+    el.setAttribute('draggable', true)
+    return el
+}
+
 spinButton.addEventListener('click', () => {
+ 
+    game.unhighlight()
+    
+    if (game.player.spinCount < 1) {
+        // TODO - pop up to remove block from tower for 10? spins
+        spinCount.innerHTML = `Out of spins!`
+        return
+    }
+    game.player.spinCount -= 1
+    game.updateSpinCount()
 
     const spinResults = dev.parseSpinResults(dev.shapoSpin())
 
@@ -122,4 +154,54 @@ spinButton.addEventListener('click', () => {
     dev.populateResults(wonShapes)
 
 }, false)
+
+const game = {
+    player: {
+        spinCount: 50
+    },
+
+    updateSpinCount: () => spinCount.innerHTML = `Spins: ${game.player.spinCount}`,
+
+    highlight: el => el.classList.add('highlighted'),
+
+    unhighlight: () => {
+        let divs = document.getElementsByClassName('highlighted')
+        for (let i = 0; i < divs.length; i++) {
+
+            let classString = divs[i].classList.contains('shapo-row')
+            ? 'row shapo-row' : 'col-4 shapo-col'
+
+            divs[i].className = classString
+        }
+    },
+
+    showWinLine: lines => {
+        let rows = document.getElementsByClassName('shapo-row')
+        let cols = document.getElementsByClassName('shapo-col')
+
+        let colMap = {
+            left:   [cols[0], cols[3], cols[6]],
+            middle: [cols[1], cols[4], cols[7]],
+            right:  [cols[2], cols[5], cols[8]]
+        }
+        const highlightCol = colList => {
+            for (let i = 0; i < colList.length; i++) {
+                game.highlight(colList[i])
+            }
+        }
+
+        switch(lines) {
+            case 'topRowMatch':   game.highlight(rows[0]);     break;
+            case 'midRowMatch':   game.highlight(rows[1]);     break;
+            case 'botRowMatch':   game.highlight(rows[2]);     break;
+            case 'leftColMatch':  highlightCol(colMap.left);   break;
+            case 'midColMatch':   highlightCol(colMap.middle); break;
+            case 'rightColMatch': highlightCol(colMap.right);  break;
+            default:
+                console.log('Zero Wins')
+        }
+
+    },
+
+}
 

@@ -37,7 +37,6 @@ body {
     min-height: 480px;
 }
 
-
 #shapomatic {
     height: 150px;
 }
@@ -45,6 +44,11 @@ body {
     background-color: lime;
     margin: 0px auto;
 }
+.shapo-row.highlighted {
+    text-shadow: 0px -2px 5px;
+    text-decoration: line-through;
+}
+
 .shapo-col {
   border: solid 1px;
   background-color: #111;
@@ -76,5 +80,5 @@ body {
 .scroll-hidden::-webkit-scrollbar { width: 0; height: 0; }
 
 /* Shapes */
-.triangle, .rectangle { margin: 5px; display: inline-block; }
-.rectangle { background-color: lime; }
+.triangle, .rectangle, .circle { margin: 5px; display: inline-block; }
+.rectangle, .circle { background-color: lime; }
