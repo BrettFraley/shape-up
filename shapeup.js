@@ -99,7 +99,7 @@ const randSizes = () => {
 
 const randOpacity = () => {
     let op = Math.random().toFixed(1)
-    return op > 0 ? op : 0.1
+    return op > 0 ? op : 0.2
 }
 
 const makeTriangle = angles => {
@@ -165,13 +165,15 @@ const game = {
     highlight: el => el.classList.add('highlighted'),
 
     unhighlight: () => {
-        let divs = document.getElementsByClassName('highlighted')
-        for (let i = 0; i < divs.length; i++) {
+        const divs = document.getElementsByClassName('highlighted')
+        const len = divs.length
 
-            let classString = divs[i].classList.contains('shapo-row')
-            ? 'row shapo-row' : 'col-4 shapo-col'
+        if (len > 0) {
+            for (let i = len - 1; i > -1; i--) {
 
-            divs[i].className = classString
+                divs[i].className = divs[i].classList.contains('shapo-row')
+                ? 'row shapo-row' : 'col-4 shapo-col'
+            }
         }
     },
 
