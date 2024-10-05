@@ -177,14 +177,14 @@ spinButton.addEventListener('click', () => {
 
 }, false)
 
-// TODO: Move drag and POC work
+// TODO: Move drag and drop POC work
 document.addEventListener('drag', e => {
     game.arena.draggedShape = e.target.classList.contains('shape') ? e.target : null
 })
 
 towerArena.addEventListener('dragover', e => {
     e.preventDefault()
-    e.dataTransfer.dropEffect = 'copy'
+    e.dataTransfer.dropEffect = 'move'
 }, false)
 
 // TODO: fine tune drop x,y related to mouse grab point
@@ -207,6 +207,8 @@ towerArena.addEventListener('drop', e => {
         shape.style.left = `${mouseX}px`
         shape.style.top = `${mouseY}px`
         e.target.appendChild(game.arena.draggedShape)
+
+        game.arena.drop(shape)
     }
 }, false)
 // END Place holder for drag POC work
@@ -220,6 +222,21 @@ const game = {
     arena: {
         draggedShape: null,
         coords: towerArena.getBoundingClientRect(),
+        
+        drop: shape => {
+            let increase = 0;
+            let dims = shape.getBoundingClientRect()
+
+            setInterval(() => {
+                if ((dims.top + dims.height) + increase < game.arena.coords.bottom) {
+                    shape.style.top = `${dims.top + increase}px`
+                    increase += 10
+                }
+                else {
+                    clearInterval()
+                }
+            }, 50)
+        }
     },
 
     updateSpinCount: () => spinCount.innerHTML = `Spins: ${game.player.spinCount}`,
