@@ -4,7 +4,7 @@ body {
     color: lime;
     font-family: courier;
     font-size: 1.5em;
-  }
+}
 
 .left { text-align: left;}
 .inline { display: inline-block; }

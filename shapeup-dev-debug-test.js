@@ -23,6 +23,13 @@ initPalletView: () => {
     }
 }
 
+    // withinArena: coords => {
+    //     return coords.top > game.arena.coords.top &&
+    //     coords.bottom < game.arena.coords.bottom &&
+    //     coords.left > game.arena.coords.left &&
+    //     coords.right < game.arena.coords.right
+    // },
+
 
 
 

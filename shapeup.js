@@ -107,7 +107,6 @@ const towerArena = document.getElementById('tower-arena')
 const spinButton = document.getElementById('spin-button')
 const spinCount = document.getElementById('spin-count')
 
-
 const rand = max => Math.floor(Math.random() * max)
 
 const randSizes = () => {
@@ -126,7 +125,7 @@ const randOpacity = () => {
 
 const makeTriangle = angles => {
     const el = document.createElement('div')
-    el.className = 'triangle'
+    el.className = 'shape triangle'
     el.style.borderLeft = `solid ${angles[0]}px transparent`
     el.style.borderRight = `solid ${angles[1]}px transparent`
     el.style.borderBottom = `solid ${SIZE}px`
@@ -137,7 +136,7 @@ const makeTriangle = angles => {
 
 const makeRectangle = sizes => {
     const el = document.createElement('div')
-    el.className = 'rectangle'
+    el.className = 'shape rectangle'
     el.style.width = `${sizes[0]}px`
     el.style.height = `${sizes[1]}px`
     el.style.opacity = randOpacity()
@@ -148,7 +147,7 @@ const makeRectangle = sizes => {
 const makeCircle = sizes => {
     const el = document.createElement('div')
     const circleSize = `${sizes[0]}px`
-    el.className = 'circle'
+    el.className = 'shape circle'
     el.style.width = circleSize
     el.style.height = circleSize
     el.style.opacity = randOpacity()
@@ -169,7 +168,7 @@ spinButton.addEventListener('click', () => {
         game.player.spinCount -= 1
         game.updateSpinCount()
         const spinResults = dev.parseSpinResults(dev.shapoSpin())
-        
+
         setTimeout(() => {
             let wonShapes = Object.keys(spinResults).filter(k =>  spinResults[k] === true)
             dev.populateResults(wonShapes)
@@ -178,9 +177,49 @@ spinButton.addEventListener('click', () => {
 
 }, false)
 
+// TODO: Move drag and POC work
+document.addEventListener('drag', e => {
+    game.arena.draggedShape = e.target.classList.contains('shape') ? e.target : null
+})
+
+towerArena.addEventListener('dragover', e => {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'copy'
+}, false)
+
+// TODO: fine tune drop x,y related to mouse grab point
+// Figure out how far mouseX is from top left of shape, > or <
+// Figure out how far mouseY is from top left of shape, > or <
+towerArena.addEventListener('drop', e => {
+    e.preventDefault()
+    if (game.arena.draggedShape) {
+
+        let shape = game.arena.draggedShape
+
+        const shapeInfo = shape.getBoundingClientRect()
+        const shapeW = Math.floor(shapeInfo.width / 2)
+        const shapeH = Math.floor(shapeInfo.height / 2)
+
+        const mouseX = e.clientX - shapeW 
+        const mouseY = e.clientY + shapeH
+
+        shape.style.position = 'absolute'
+        shape.style.left = `${mouseX}px`
+        shape.style.top = `${mouseY}px`
+        e.target.appendChild(game.arena.draggedShape)
+    }
+}, false)
+// END Place holder for drag POC work
+
 const game = {
     player: {
-        spinCount: 50
+        spinCount: 50,
+        towerLevel: 0
+    },
+
+    arena: {
+        draggedShape: null,
+        coords: towerArena.getBoundingClientRect(),
     },
 
     updateSpinCount: () => spinCount.innerHTML = `Spins: ${game.player.spinCount}`,
@@ -225,7 +264,6 @@ const game = {
             default:
                 console.log('Zero Wins')
         }
-
     },
 
 }
