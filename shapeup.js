@@ -21,6 +21,7 @@ const dev = {
         }
     },
 
+
     shapoSpin: () => {
         let cols = document.getElementsByClassName('shapo-col')
         let vals = []
@@ -35,7 +36,6 @@ const dev = {
                 cols[i].style.opacity = randOpacity()
             }
             once = true
-
         }, 200)
 
         setTimeout(() => { 
@@ -52,7 +52,7 @@ const dev = {
             cols[i].innerHTML = shapeVal
             vals.push(shapeVal)
         }
-
+    
         return [
             [vals[0], vals[1], vals[2]],
             [vals[3], vals[4], vals[5]],
@@ -95,6 +95,16 @@ const dev = {
             game.showWinLine(val)
         })
     },
+    autoSpin: () => {
+        setInterval(() => {
+            if (game.player.spinCount > 0) {
+                spinButton.click()
+            }
+            else {
+                clearInterval()
+            }
+        }, 4000)
+    }
 
 }
 
@@ -105,7 +115,9 @@ const wrap = document.getElementById('wrap')
 const spinShapes = document.getElementById('spin-shapes')
 const towerArena = document.getElementById('tower-arena')
 const spinButton = document.getElementById('spin-button')
+const autoSpinButton = document.getElementById('auto-button')
 const spinCount = document.getElementById('spin-count')
+const shapoMatic = document.getElementById('shapomatic')
 
 const rand = max => Math.floor(Math.random() * max)
 
@@ -177,6 +189,10 @@ spinButton.addEventListener('click', () => {
 
 }, false)
 
+autoSpinButton.addEventListener('click', () => {
+    dev.autoSpin()
+}, false)
+
 // TODO: Move drag and drop POC work
 document.addEventListener('drag', e => {
     game.arena.draggedShape = e.target.classList.contains('shape') ? e.target : null
@@ -223,19 +239,58 @@ const game = {
         draggedShape: null,
         coords: towerArena.getBoundingClientRect(),
         
+        // If any shapes left side is within the dropping shape's left and right side
+        // or right side is within dropping shape's left and right side, and shape's top
+        // is below the dropping shape's bottom, then it is below the dropping shape
+        getTowerShapes: () => {
+            let = rects = []
+            let shapes = towerArena.getElementsByClassName('shape')
+
+            for (let i = 0; i < shapes.length; i++) {
+                if (!shapes[i].classList.contains('active-drop')) {
+                    rects.push(shapes[i].getBoundingClientRect())
+                }
+            }
+            console.log('rects', rects)
+            return rects
+        },
+        // Any one shape may not be dragged within another's bounding box / path
+        detectShapeBelow: shape => {
+            console.log(shape)
+            let shapes = game.arena.getTowerShapes()
+            let belowShapes = shapes.filter(s => {
+
+                return  (s.left > shape.left && s.left < shape.right)   ||
+                        (s.right > shape.left && s.right < shape.right) ||
+                        (s.left < shape.left && s.right > shape.right) 
+            })
+            console.log('Below Shapes: ', belowShapes)
+            return belowShapes
+        },
+
         drop: shape => {
-            let increase = 0;
-            let dims = shape.getBoundingClientRect()
+            let increase = 0
+            const dims = shape.getBoundingClientRect()
+            shape.classList.add('active-drop')
+            shape.classList.add('tower-shape')
+
+            const belowShapes = game.arena.detectShapeBelow(dims)
+            let topPoint = belowShapes.map(s => s.top).sort()[belowShapes.length - 1]
+
+            let floor = topPoint !== undefined ? topPoint + dims.height : game.arena.coords.bottom
+
+            console.log(floor)
 
             setInterval(() => {
-                if ((dims.top + dims.height) + increase < game.arena.coords.bottom) {
+                if (dims.top + dims.height + increase < floor) {
                     shape.style.top = `${dims.top + increase}px`
-                    increase += 10
+                    increase += 1
                 }
                 else {
                     clearInterval()
                 }
-            }, 50)
+            }, 5)
+            shape.classList.remove('active-drop')
         }
     },
 

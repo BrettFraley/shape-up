@@ -62,12 +62,21 @@ body {
     margin-bottom: 15px;
     padding: 10px;
 }
+
+#auto-button {
+    display: block;
+    margin-top: -10px;
+    background-color: lime;
+    color: #111;
+    font-size: 0.75rem;
+}
+
 #machine-logo {
     font-variant: small-caps;
     letter-spacing: 0.8em;
 }
 
-#spin-button:hover { opacity: 1; }
+#spin-button:hover, #auto-button:hover { opacity: 1; }
 
 #tower-arena {
     border: solid 2px;
@@ -82,3 +91,4 @@ body {
 /* Shapes */
 .triangle, .rectangle, .circle { margin: 5px; display: inline-block; }
 .rectangle, .circle { background-color: lime; }
+.tower-shape { margin: 0 }
